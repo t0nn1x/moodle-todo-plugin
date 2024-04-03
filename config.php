@@ -80,6 +80,7 @@ $CFG->dataroot = 'C:\xampp\sitedata\moodle';
 $CFG->directorypermissions = 02777;
 
 $CFG->cachejs = false;
+$CFG->cachetemplates = false;
 
 $CFG->admin = 'admin';
 
