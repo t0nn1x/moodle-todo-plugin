@@ -6,54 +6,26 @@
 // This file should be renamed "config.php" in the top-level directory   //
 //                                                                       //
 ///////////////////////////////////////////////////////////////////////////
-//                                                                       //
-// NOTICE OF COPYRIGHT                                                   //
-//                                                                       //
-// Moodle - Modular Object-Oriented Dynamic Learning Environment         //
-//          http://moodle.org                                            //
-//                                                                       //
-// Copyright (C) 1999 onwards  Martin Dougiamas  http://moodle.com       //
-//                                                                       //
-// This program is free software; you can redistribute it and/or modify  //
-// it under the terms of the GNU General Public License as published by  //
-// the Free Software Foundation; either version 3 of the License, or     //
-// (at your option) any later version.                                   //
-//                                                                       //
-// This program is distributed in the hope that it will be useful,       //
-// but WITHOUT ANY WARRANTY; without even the implied warranty of        //
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         //
-// GNU General Public License for more details:                          //
-//                                                                       //
-//          http://www.gnu.org/copyleft/gpl.html                         //
-//                                                                       //
-///////////////////////////////////////////////////////////////////////////
-unset($CFG);  // Ignore this line
-global $CFG;  // This is necessary here for PHPUnit execution
+
+unset($CFG);
+global $CFG;
 $CFG = new stdClass();
 
 //===========================================================================
-// @check
-// Keept this when you use MariaDB, mysqli if you use MySQL
+// Database Configuration for Docker
 //===========================================================================
-$CFG->dbtype = 'mariadb';  // 'pgsql', 'mariadb', 'mysqli', 'mssql', 'sqlsrv' or 'oci'
-
-$CFG->dblibrary = 'native';  // 'native' only at the moment
-$CFG->dbhost = 'localhost';  // eg 'localhost' or 'db.isp.com' or IP
+$CFG->dbtype = 'mariadb';
+$CFG->dblibrary = 'native';
+$CFG->dbhost = 'db';  // Docker service name
 
 //===========================================================================
-// @check
-// The name of the Database you created
+// Database credentials (matching docker-compose.yml)
 //===========================================================================
 $CFG->dbname = 'moodle';
+$CFG->dbuser = 'moodleuser';
+$CFG->dbpass = 'moodlepass';
 
-//===========================================================================
-// @check
-// You may need to change the username and password to authenticate to the DB
-//===========================================================================
-$CFG->dbuser = 'root';
-$CFG->dbpass = '';
-
-$CFG->prefix = 'mdl_';       // prefix to use for all table names
+$CFG->prefix = 'mdl_';
 
 $CFG->dboptions = array(
     'dbpersist' => false,
@@ -64,23 +36,22 @@ $CFG->dboptions = array(
 );
 
 //===========================================================================
-// @check
-// You may need to update the port here
-// Here moodle is saved in C:\xampp\htdocs\moodle
-// C:\xampp\htdocs is the root directoy where files are served from the Webserver
+// Web Configuration for Docker
 //===========================================================================
-$CFG->wwwroot = 'http://localhost:5000/moodle';
+$CFG->wwwroot = 'http://localhost:8080';
 
 //=========================================================================
-// @check
-// The location to the sitedata Folder you created
+// Data Directory (Docker volume)
 //=========================================================================
-$CFG->dataroot = 'C:\xampp\sitedata\moodle';
+$CFG->dataroot = '/var/www/moodledata';
 
 $CFG->directorypermissions = 02777;
 
+// Development settings (remove in production)
 $CFG->cachejs = false;
 $CFG->cachetemplates = false;
+$CFG->debug = 32767;  // Show all debug messages
+$CFG->debugdisplay = 1;  // Display debug messages
 
 $CFG->admin = 'admin';
 
@@ -88,7 +59,7 @@ $CFG->admin = 'admin';
 // ALL DONE!  To continue installation, visit your main page with a browser
 //=========================================================================
 
-require_once(__DIR__ . '/lib/setup.php'); // Do not edit
+require_once(__DIR__ . '/lib/setup.php');
 
 // There is no php closing tag in this file,
 // it is intentional because it prevents trailing whitespace problems!
