@@ -88,7 +88,6 @@ if (empty($todos)) {
             html_writer::span(get_string('complete', 'local_todo'), 'badge badge-success') :
             html_writer::span(get_string('pending', 'local_todo'), 'badge badge-warning');
 
-        // action buttons
         $actions = [];
 
         if (has_capability('local/todo:manage', $context)) {
@@ -117,8 +116,20 @@ if (empty($todos)) {
 
 // display the form below the table
 $formtitle = $editing ? get_string('edittodo', 'local_todo') : get_string('addtodo', 'local_todo');
+
 echo html_writer::start_div('todo-form-wrapper', ['style' => 'border: 1px solid #ccc; border-radius: 8px; padding: 24px; margin-top: 24px; background: #fafafa;']);
+
+if ($editing) {
+    // show a 'New Todo' button while in edit mode to return to add mode
+    $newurl = new moodle_url('/local/todo/index.php');
+    echo html_writer::div(
+        html_writer::link($newurl, get_string('addtodo', 'local_todo'), ['class' => 'btn btn-link', 'style' => 'float:right; margin-bottom: 8px;']),
+        '', ['style' => 'overflow: auto;']
+    );
+}
+
 echo html_writer::tag('h3', $formtitle, ['class' => 'mt-4']);
+
 $mform->display();
 echo html_writer::end_div();
 
