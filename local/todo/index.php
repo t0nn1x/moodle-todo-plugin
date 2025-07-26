@@ -14,7 +14,7 @@ require_once($CFG->libdir . '/tablelib.php');
 
 require_login();
 
-$context = context_user::instance($USER->id);
+$context =   $context = context_system::instance();
 require_capability('local/todo:view', $context);
 
 $PAGE->set_context($context);
