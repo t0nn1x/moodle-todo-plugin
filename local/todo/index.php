@@ -24,8 +24,11 @@ $PAGE->set_url('/local/todo/index.php');
 $PAGE->set_pagelayout('standard');
 $PAGE->set_title(get_string('todolist', 'local_todo'));
 $PAGE->set_heading(get_string('todolist', 'local_todo'));
+$PAGE->requires->css(new moodle_url('/local/todo/styles.css'));
 
 echo $OUTPUT->header();
+
+echo html_writer::start_div('todo-main-container');
 
 $id = optional_param('id', 0, PARAM_INT);
 $editing = false;
@@ -79,7 +82,7 @@ if (empty($todos)) {
         get_string('status', 'local_todo'),
         get_string('actions', 'local_todo')
     ];
-    $table->attributes['class'] = 'table table-striped';
+    $table->attributes['class'] = 'todo-table';
 
     foreach ($todos as $todo) {
         $name = format_string($todo->name);
@@ -95,7 +98,7 @@ if (empty($todos)) {
             $actions[] = html_writer::link(
                 $editurl,
                 get_string('edit', 'local_todo'),
-                ['class' => 'btn btn-sm btn-secondary']
+                ['class' => 'btn btn-secondary']
             );
         }
 
@@ -104,7 +107,7 @@ if (empty($todos)) {
             $actions[] = html_writer::link(
                 $deleteurl,
                 get_string('delete', 'local_todo'),
-                ['class' => 'btn btn-sm btn-danger']
+                ['class' => 'btn btn-danger']
             );
         }
 
@@ -119,18 +122,20 @@ $formtitle = $editing ? get_string('edittodo', 'local_todo') : get_string('addto
 
 echo html_writer::start_div('todo-form-wrapper', ['style' => 'border: 1px solid #ccc; border-radius: 8px; padding: 24px; margin-top: 24px; background: #fafafa;']);
 
+echo html_writer::start_div('todo-form-header');
+echo html_writer::tag('h3', $formtitle, ['class' => 'mt-4']);
+
 if ($editing) {
     // show a 'New Todo' button while in edit mode to return to add mode
     $newurl = new moodle_url('/local/todo/index.php');
-    echo html_writer::div(
-        html_writer::link($newurl, get_string('addtodo', 'local_todo'), ['class' => 'btn btn-link', 'style' => 'float:right; margin-bottom: 8px;']),
-        '', ['style' => 'overflow: auto;']
-    );
+    echo html_writer::link($newurl, get_string('addtodo', 'local_todo'), ['class' => 'btn btn-link']);
 }
 
-echo html_writer::tag('h3', $formtitle, ['class' => 'mt-4']);
+echo html_writer::end_div();
 
 $mform->display();
+echo html_writer::end_div();
+
 echo html_writer::end_div();
 
 echo $OUTPUT->footer();
