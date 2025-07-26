@@ -9,6 +9,53 @@
     padding: 32px 40px 40px 40px;
 }
 
+.todo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f1f3f7;
+}
+
+.todo-title {
+    font-size: 2em;
+    margin: 0;
+    color: #2d3a4a;
+    font-weight: 600;
+}
+
+.todo-stats {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    flex: 1;
+    margin-left: 40px;
+}
+
+.stat-item {
+    background: #f8f9fa;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9em;
+    border: 2px solid #e9ecef;
+    min-width: 80px;
+    text-align: center;
+}
+
+.stat-pending {
+    background: #fff3cd;
+    border-color: #ffeaa7;
+    color: #856404;
+}
+
+.stat-completed {
+    background: #19da0b;
+    border-color: #74b9ff;
+    color: #0c5460;
+}
+
 .todo-table {
     width: 100%;
     border-collapse: separate;

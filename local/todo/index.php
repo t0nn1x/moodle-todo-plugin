@@ -71,6 +71,29 @@ if ($mform->is_cancelled()) {
 // get user's todos
 $todos = local_todo_get_user_todos($USER->id);
 
+// calculate statistics
+$total_todos = count($todos);
+$completed_todos = 0;
+$pending_todos = 0;
+
+foreach ($todos as $todo) {
+    if ($todo->completed) {
+        $completed_todos++;
+    } else {
+        $pending_todos++;
+    }
+}
+
+// create header with title and statistics
+echo html_writer::start_div('todo-header');
+echo html_writer::tag('h1', get_string('todos', 'local_todo'), ['class' => 'todo-title']);
+echo html_writer::start_div('todo-stats');
+echo html_writer::tag('span', 'Total: ' . $total_todos, ['class' => 'stat-item']);
+echo html_writer::tag('span', 'Pending: ' . $pending_todos, ['class' => 'stat-item stat-pending']);
+echo html_writer::tag('span', 'Completed: ' . $completed_todos, ['class' => 'stat-item stat-completed']);
+echo html_writer::end_div();
+echo html_writer::end_div();
+
 if (empty($todos)) {
     echo $OUTPUT->notification(get_string('notodos', 'local_todo'), 'info');
 } else {
