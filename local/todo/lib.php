@@ -11,6 +11,28 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
+ * Add todo link to the main navigation panel.
+ *
+ * @param global_navigation $nav The global navigation object
+ */
+function local_todo_extend_navigation(global_navigation $nav) {
+    global $PAGE;
+
+    // Only show to logged-in users (optional)
+    if (isloggedin() && !isguestuser()) {
+        $node = navigation_node::create(
+            get_string('pluginname', 'local_todo'), // Link text
+            new moodle_url('/local/todo/index.php'), // Link URL
+            navigation_node::TYPE_CUSTOM,
+            null,
+            'local_todo',
+            new pix_icon('i/check', '') // Optional: use a Moodle icon
+        );
+        $nav->add_node($node);
+    }
+}
+
+/**
  * Add todo link to user profile menu.
  *
  * @param navigation_node $navigation The navigation node to extend
