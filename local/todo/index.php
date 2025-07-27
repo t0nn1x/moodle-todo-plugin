@@ -23,12 +23,6 @@ require_capability('local/todo:view', $context);
 
 $PAGE->set_context($context);
 $PAGE->set_url('/local/todo/index.php');
-$PAGE->set_pagelayout('standard');
-$PAGE->set_title(get_string('todolist', 'local_todo'));
-$PAGE->set_heading(get_string('todolist', 'local_todo'));
-$PAGE->requires->css(new moodle_url('/local/todo/styles.css'));
-
-echo $OUTPUT->header();
 
 $id = optional_param('id', 0, PARAM_INT);
 $editing = false;
@@ -51,21 +45,30 @@ if ($mform->is_cancelled()) {
     redirect(new moodle_url('/local/todo/index.php'));
 } else if ($data = $mform->get_data()) {
     if (!empty($data->id)) {
-        // update existing todo
         if (todo_manager::update_todo($data->id, $data)) {
             redirect(new moodle_url('/local/todo/index.php'), get_string('todoupdated', 'local_todo'));
         } else {
-            echo $OUTPUT->notification('Failed to update todo', 'error');
+            $error_message = 'Failed to update todo';
         }
     } else {
-        // create new todo
         $newid = todo_manager::create_todo($data);
         if ($newid) {
             redirect(new moodle_url('/local/todo/index.php'), get_string('todoadded', 'local_todo'));
         } else {
-            echo $OUTPUT->notification('Failed to create todo', 'error');
+            $error_message = 'Failed to create todo';
         }
     }
+}
+
+$PAGE->set_pagelayout('standard');
+$PAGE->set_title(get_string('todolist', 'local_todo'));
+$PAGE->set_heading(get_string('todolist', 'local_todo'));
+$PAGE->requires->css(new moodle_url('/local/todo/styles.css'));
+
+echo $OUTPUT->header();
+
+if (isset($error_message)) {
+    echo $OUTPUT->notification($error_message, 'error');
 }
 
 $todos = todo_manager::get_user_todos($USER->id);
