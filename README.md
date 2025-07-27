@@ -1,92 +1,231 @@
-# Moodle
+# Moodle Todo Plugin
 
+A comprehensive todo list management plugin for Moodle that enables users to create, edit, delete, and manage their personal todo items through a modern, user-friendly interface.
 
+## Project Overview
 
-## Getting started
+This project demonstrates the complete development lifecycle of a Moodle local plugin, including:
+- Complete Moodle environment setup using Docker containers
+- Custom plugin development following Moodle coding standards
+- Implementation of CRUD operations with proper security measures
+- Modern UI/UX design with responsive layout
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+**Repository:** https://github.com/t0nn1x/moodle-todo-plugin
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+### Core Features
 
-## Add your files
+- Create, edit, and delete todo items
+- Due date management with validation
+- Status tracking (pending/completed)
+- Statistics dashboard showing total, pending, and completed todos
+- Modern, responsive UI with custom styling
+- Proper Moodle capabilities and permissions system
+- Full internationalization support
+- Mobile-friendly responsive design
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+## Installation and Setup
+
+### Prerequisites
+
+- Docker and Docker Compose
+- Git for version control
+- Web browser for Moodle interface
+
+### Project Environment Setup
+
+1. **Clone the Repository**
+```bash
+git clone https://github.com/t0nn1x/moodle-todo-plugin
+cd moodle
+```
+
+1. **Start Docker Services**
+```bash
+docker-compose up -d
+```
+
+**Docker Configuration:**
+- Database: MariaDB 10.11 (port 3306)
+- Web Server: PHP 7.4 with Apache (port 8080)
+- Persistent volumes for database and Moodle data
+
+3. **Complete Moodle Installation**
+- Navigate to `http://localhost:8080`
+- Follow the installation wizard
+- Configure database connection:
+  - Database type: MariaDB
+  - Host: `db`
+  - Database: `moodle`
+  - Username: `moodleuser`
+  - Password: `moodlepass`
+
+4. **Administrator Setup**
+- Create admin user account
+- Configure site settings 
+
+## Technical Architecture
+
+### Directory Structure
 
 ```
-cd existing_repo
-git remote add origin https://gitlab.learnchamp.com/external/moodle.git
-git branch -M main
-git push -uf origin main
+local/todo/
+├── classes/
+│   ├── form/
+│   │   └── todo_form.php          # Moodle form implementation
+│   ├── output/
+│   │   └── renderer.php           # Template rendering logic
+│   └── todo_manager.php           # Business logic layer
+├── db/
+│   ├── access.php                 # Capability definitions
+│   └── install.xml                # Database schema definition
+├── lang/en/
+│   └── local_todo.php             # Internationalization strings
+├── templates/
+│   ├── index.mustache             # Main interface template
+│   ├── header.mustache            # Statistics header template
+│   ├── table.mustache             # Todo list table template
+│   └── form_wrapper.mustache      # Form container template
+├── delete.php                     # Deletion handler
+├── edit.php                       # Creation/editing interface
+├── index.php                      # Main application entry point
+├── lib.php                        # Plugin library functions
+├── styles.css                     # Custom stylesheet
+└── version.php                    # Plugin metadata
 ```
 
-## Integrate with your tools
+### Database Schema
 
-- [ ] [Set up project integrations](https://gitlab.learnchamp.com/external/moodle/-/settings/integrations)
+The plugin implements a `local_todo` table with the following structure:
 
-## Collaborate with your team
+| Field | Type | Constraints | Description |
+|-------|------|-------------|-------------|
+| id | int(10) | PRIMARY KEY, AUTO_INCREMENT | Unique identifier |
+| userid | int(10) | FOREIGN KEY (user.id) | Owner user reference |
+| name | varchar(255) | NOT NULL | Todo item title |
+| description | text | NULL | Optional description |
+| duedate | int(10) | NULL | Unix timestamp for due date |
+| completed | tinyint(1) | DEFAULT 0 | Completion status |
+| timecreated | int(10) | NOT NULL | Creation timestamp |
+| timemodified | int(10) | NOT NULL | Last modification timestamp |
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+### Capability System
 
-## Test and Deploy
+The plugin defines three granular capabilities:
 
-Use the built-in continuous integration in GitLab.
+- `local/todo:view` - Permission to view todo items
+- `local/todo:manage` - Permission to create and modify todos
+- `local/todo:delete` - Permission to delete todo items
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+All capabilities are assigned to authenticated users by default at the user context level.
 
-***
+## Feature Documentation
 
-# Editing this README
+### Dashboard Interface
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+The main dashboard provides comprehensive todo management functionality.
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+![Dashboard](./screenshots/dashboard.png)
 
-## Name
-Choose a self-explaining name for your project.
+**Interface Components:**
+- Real-time statistics display (Total, Pending, Completed counts)
+- Sortable data table with all user todos
+- Contextual action buttons for item management
+- Integrated creation form
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+### Todo Creation
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+Users can create new todo items through a validated form interface.
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+![Create Todo](./screenshots/creation.png)
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+**Form Features:**
+- Name field with length validation (maximum 255 characters)
+- Optional description textarea
+- Due date selector with past date validation
+- Completion status checkbox
+- Client-side and server-side validation
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+### Todo Management
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+Existing todos can be modified through the same form interface with pre-populated data.
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+![Edit Todo](./screenshots/editing.png)
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+### List View
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+The todo list provides a comprehensive overview of all items with status indicators.
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+![List View](./screenshots/list.png)
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+**Table Features:**
+- Visual status indicators (color-coded badges)
+- Formatted date display
+- Contextual action menus
+- Responsive design for various screen sizes
+
+### Deletion Workflow
+
+Safe deletion process with confirmation dialog to prevent accidental data loss.
+
+![Delete Todo](./screenshots/deletion.png)
+
+### Navigation Integration
+
+Seamless integration with Moodle's navigation system.
+
+![Navigation](./screenshots/navigation.png)
+
+## User Interface Design
+
+### Design Principles
+
+The plugin implements modern web design principles:
+
+- Clean, card-based layout with subtle shadows and rounded corners
+- Intuitive color coding for different states and actions
+- Smooth transitions and hover effects for enhanced user experience
+- Fully responsive design supporting all device categories
+- Consistent typography and spacing following design systems
+
+## Security Implementation
+
+### Security Measures
+
+- **Access Control:** Capability-based permissions using Moodle's security framework
+- **CSRF Protection:** Session key validation for all state-changing operations
+- **Input Validation:** Comprehensive server-side validation and sanitization
+- **Data Isolation:** Users can only access and modify their own todo items
+
+### Code Quality Standards
+
+- PSR-4 compliant autoloading and namespace organization
+- Full compliance with Moodle coding standards
+- Comprehensive error handling with appropriate user feedback
+- Database abstraction using Moodle's Data Manipulation Language (DML)
+- Separation of concerns using Mustache templating engine
+
+## Internationalization
+
+The plugin supports full internationalization through:
+- Complete English language pack implementation
+- Structured string identifiers for easy localization
+- Integration with Moodle's language system
+- Preparation for multi-language deployment
+
+## Development Notes
+
+### Implementation Decisions
+
+1. **Containerized Development Environment:** Docker implementation for consistent development setup
+2. **Template-Based Architecture:** Custom renderer with Mustache templates for maintainable UI
+3. **Centralized Business Logic:** Manager class pattern for clean code organization
+4. **Moodle Form API Integration:** Leveraging built-in validation and security features
+5. **Navigation System Integration:** Proper integration with Moodle's navigation architecture
 
 ## License
-For open source projects, say how it is licensed.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+This plugin is released under the GNU General Public License v3.0 or later, maintaining compatibility with Moodle's licensing requirements.
+
+---
+
+**Project Status:** Complete implementation with all core requirements fulfilled and additional professional enhancements integrated.
