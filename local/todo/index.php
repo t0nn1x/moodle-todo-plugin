@@ -126,11 +126,14 @@ if (empty($todos)) {
         }
 
         if (has_capability('local/todo:delete', $context)) {
-            $deleteurl = new moodle_url('/local/todo/delete.php', ['id' => $todo->id]);
+            $deleteurl = new moodle_url('/local/todo/delete.php', ['id' => $todo->id, 'confirm' => 1, 'sesskey' => sesskey()]);
             $actions[] = html_writer::link(
                 $deleteurl,
                 get_string('delete', 'local_todo'),
-                ['class' => 'btn btn-danger']
+                [
+                    'class' => 'btn btn-danger',
+                    'onclick' => 'return confirm("' . get_string('confirmdelete', 'local_todo') . '\\n\\n' . addslashes($todo->name) . '")'
+                ]
             );
         }
 
