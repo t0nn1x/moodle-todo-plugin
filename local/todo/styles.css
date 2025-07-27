@@ -1,0 +1,205 @@
+/* Fancy-shmancy styles for the Todo plugin */
+
+.todo-main-container {
+    max-width: 1200px;
+    margin: 32px auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    padding: 32px 40px 40px 40px;
+}
+
+.todo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f1f3f7;
+}
+
+.todo-title {
+    font-size: 2em;
+    margin: 0;
+    color: #2d3a4a;
+    font-weight: 600;
+}
+
+.todo-stats {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    flex: 1;
+    margin-left: 40px;
+}
+
+.stat-item {
+    background: #f8f9fa;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9em;
+    border: 2px solid #e9ecef;
+    min-width: 80px;
+    text-align: center;
+}
+
+.stat-pending {
+    background: #fff3cd;
+    border-color: #ffeaa7;
+    color: #856404;
+}
+
+.stat-completed {
+    background: #22d512;
+    border-color: #74b9ff;
+    color: #0c5460;
+}
+
+.todo-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #f9fafb;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 32px;
+}
+.todo-table th, .todo-table td {
+    padding: 16px 18px;
+    text-align: left;
+}
+.todo-table th {
+    background: #f1f3f7;
+    font-weight: 600;
+    border-bottom: 2px solid #e0e0e0;
+}
+.todo-table tr:not(:last-child) td {
+    border-bottom: 1px solid #ececec;
+}
+.todo-table .badge-success {
+    background: #27ae60;
+    color: #fff;
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 0.95em;
+}
+.todo-table .badge-warning {
+    background: #f39c12;
+    color: #fff;
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 0.95em;
+}
+.todo-table .btn {
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 0.9em;
+    margin-right: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+    font-weight: 500;
+}
+.todo-table .btn-secondary {
+    background: #6c757d;
+    color: #fff;
+    border: 1px solid #6c757d;
+}
+.todo-table .btn-secondary:hover {
+    background: #5a6268;
+    border-color: #545b62;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.todo-table .btn-danger {
+    background: #dc3545;
+    color: #fff;
+    border: 1px solid #dc3545;
+}
+.todo-table .btn-danger:hover {
+    background: #c82333;
+    border-color: #bd2130;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(220,53,69,0.2);
+}
+
+.todo-form-wrapper {
+    background: #f7fafd;
+    border: 1.5px solid #e0e7ef;
+    border-radius: 10px;
+    padding: 32px 28px 24px 28px;
+    margin-top: 32px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+
+.todo-form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 18px;
+}
+
+.todo-form-wrapper h3 {
+    font-size: 1.4em;
+    margin: 0;
+    font-weight: 600;
+    color: #2d3a4a;
+}
+.todo-form-wrapper label {
+    font-weight: 500;
+    color: #34495e;
+}
+.todo-form-wrapper input[type="text"],
+.todo-form-wrapper textarea,
+.todo-form-wrapper .form-control,
+.todo-form-wrapper .ftext input,
+.todo-form-wrapper .ftextarea textarea {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 10px 12px;
+    border: 1.5px solid #dbe6f3;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    font-size: 1em;
+    background: #fff;
+    transition: border 0.2s;
+    font-family: inherit;
+}
+.todo-form-wrapper input[type="text"]:focus,
+.todo-form-wrapper textarea:focus,
+.todo-form-wrapper .form-control:focus,
+.todo-form-wrapper .ftext input:focus,
+.todo-form-wrapper .ftextarea textarea:focus {
+    border-color: #7abaff;
+    outline: none;
+}
+.todo-form-wrapper .btn {
+    border: none;
+    border-radius: 5px;
+    padding: 8px 22px;
+    font-size: 1em;
+    margin-right: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.todo-form-wrapper .btn-primary {
+    background: #3498db;
+    color: #fff;
+}
+.todo-form-wrapper .btn-primary:hover {
+    background: #217dbb;
+}
+.todo-form-wrapper .btn-link {
+    background: none;
+    color: #3498db;
+    text-decoration: underline;
+    padding: 0;
+    font-weight: 500;
+}
+.todo-form-wrapper .btn-link:hover {
+    color: #217dbb;
+} 
