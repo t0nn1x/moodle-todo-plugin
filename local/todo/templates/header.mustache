@@ -1,0 +1,18 @@
+{{!
+    @template local_todo/header
+
+    Todo list header with title and statistics.
+
+    Context variables required for this template:
+    * title - Page title
+    * stats - Statistics object with total, pending, completed counts and labels
+}}
+
+<div class="todo-header">
+    <h1 class="todo-title">{{title}}</h1>
+    <div class="todo-stats">
+        <span class="stat-item">{{stats.total_label}}: {{stats.total}}</span>
+        <span class="stat-item stat-pending">{{stats.pending_label}}: {{stats.pending}}</span>
+        <span class="stat-item stat-completed">{{stats.completed_label}}: {{stats.completed}}</span>
+    </div>
+</div> 

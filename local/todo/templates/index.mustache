@@ -1,0 +1,29 @@
+{{!
+    @template local_todo/index
+
+    Todo list main page template.
+
+    Context variables required for this template:
+    * title - Page title
+    * stats - Statistics object with total, pending, completed counts and labels
+    * notodos - Boolean indicating if there are no todos
+    * notification - Notification data for when there are no todos
+    * table - Table data for todos
+    * form - Form data and content
+}}
+
+<div class="todo-main-container">
+    {{> local_todo/header }}
+    
+    {{#notodos}}
+        <div class="alert alert-info">
+            {{notification.message}}
+        </div>
+    {{/notodos}}
+    
+    {{^notodos}}
+        {{> local_todo/table }}
+    {{/notodos}}
+    
+    {{> local_todo/form_wrapper }}
+</div> 
