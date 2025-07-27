@@ -1,0 +1,28 @@
+{{!
+    @template local_todo/table
+
+    Todo list table template.
+
+    Context variables required for this template:
+    * table - Table object with headers and rows arrays
+}}
+
+<table class="todo-table table table-striped">
+    <thead>
+        <tr>
+            {{#table.headers}}
+                <th>{{.}}</th>
+            {{/table.headers}}
+        </tr>
+    </thead>
+    <tbody>
+        {{#table.rows}}
+            <tr>
+                <td>{{name}}</td>
+                <td>{{duedate}}</td>
+                <td>{{{status}}}</td>
+                <td>{{{actions}}}</td>
+            </tr>
+        {{/table.rows}}
+    </tbody>
+</table> 

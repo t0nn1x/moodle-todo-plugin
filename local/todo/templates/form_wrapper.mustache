@@ -1,0 +1,19 @@
+{{!
+    @template local_todo/form_wrapper
+
+    Todo form wrapper template.
+
+    Context variables required for this template:
+    * form - Form object with title, form_html, editing, new_todo_url, new_todo_text
+}}
+
+<div class="todo-form-wrapper" style="border: 1px solid #ccc; border-radius: 8px; padding: 24px; margin-top: 24px; background: #fafafa;">
+    <div class="todo-form-header">
+        <h3 class="mt-4">{{form.title}}</h3>
+        {{#form.editing}}
+            <a href="{{form.new_todo_url}}" class="btn btn-link">{{form.new_todo_text}}</a>
+        {{/form.editing}}
+    </div>
+    
+    {{{form.form_html}}}
+</div> 

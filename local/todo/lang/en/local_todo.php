@@ -40,6 +40,7 @@ $string['yes'] = 'Yes';
 $string['no'] = 'No';
 $string['pending'] = 'Pending';
 $string['complete'] = 'Complete';
+$string['total'] = 'Total';
 
 // Messages
 $string['notodos'] = 'No todos found.';
