@@ -15,6 +15,7 @@ defined('MOODLE_INTERNAL') || die();
 use plugin_renderer_base;
 use html_writer;
 use moodle_url;
+use local_todo\todo_manager;
 
 /**
  * Renderer for todo plugin
@@ -31,27 +32,17 @@ class renderer extends plugin_renderer_base {
      * @return string HTML output
      */
     public function render_todo_page($todos, $mform, $editing = false, $todo = null) {
+        global $USER;
+        
         $data = new \stdClass();
         
-        // statistics
-        $total_todos = count($todos);
-        $completed_todos = 0;
-        $pending_todos = 0;
-
-        foreach ($todos as $todoitem) {
-            if ($todoitem->completed) {
-                $completed_todos++;
-            } else {
-                $pending_todos++;
-            }
-        }
-
-        // header data
+        $stats = todo_manager::get_user_statistics($USER->id);
+        
         $data->title = get_string('todos', 'local_todo');
         $data->stats = (object) [
-            'total' => $total_todos,
-            'pending' => $pending_todos,
-            'completed' => $completed_todos,
+            'total' => $stats->total,
+            'pending' => $stats->pending,
+            'completed' => $stats->completed,
             'total_label' => get_string('total', 'local_todo'),
             'pending_label' => get_string('pending', 'local_todo'),
             'completed_label' => get_string('complete', 'local_todo')
@@ -70,7 +61,6 @@ class renderer extends plugin_renderer_base {
             $data->table = $this->prepare_table_data($todos);
         }
 
-        // form data
         $data->form = $this->prepare_form_data($mform, $editing, $todo);
 
         return $this->render_from_template('local_todo/index', $data);

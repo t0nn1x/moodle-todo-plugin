@@ -11,6 +11,8 @@
 require_once(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/lib.php');
 
+use local_todo\todo_manager;
+
 $id = optional_param('id', 0, PARAM_INT);
 
 require_login();
@@ -22,8 +24,8 @@ require_capability('local/todo:manage', $context);
 $todo = null;
 $editing = false;
 if ($id) {
-    $todo = local_todo_get_todo($id);
-    if (!$todo || !local_todo_can_manage_todo($id)) {
+    $todo = todo_manager::get_todo($id);
+    if (!$todo || !todo_manager::can_manage_todo($id)) {
         throw new moodle_exception('invalidtodo', 'local_todo');
     }
     $editing = true;
@@ -48,7 +50,7 @@ if ($mform->is_cancelled()) {
 } else if ($data = $mform->get_data()) {
     if ($editing) {
         // update existing todo
-        if (local_todo_update_todo($id, $data)) {
+        if (todo_manager::update_todo($id, $data)) {
             redirect(
                 new moodle_url('/local/todo/index.php'),
                 get_string('todoupdated', 'local_todo')
@@ -58,7 +60,7 @@ if ($mform->is_cancelled()) {
         }
     } else {
         // create new todo
-        $newid = local_todo_create_todo($data);
+        $newid = todo_manager::create_todo($data);
         if ($newid) {
             redirect(
                 new moodle_url('/local/todo/index.php'),

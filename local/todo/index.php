@@ -14,6 +14,8 @@ require_once($CFG->libdir . '/tablelib.php');
 require_once($CFG->libdir . '/formslib.php');
 require_once($CFG->dirroot . '/local/todo/classes/form/todo_form.php');
 
+use local_todo\todo_manager;
+
 require_login();
 
 $context = context_system::instance();
@@ -32,8 +34,8 @@ $id = optional_param('id', 0, PARAM_INT);
 $editing = false;
 $todo = null;
 if ($id) {
-    $todo = local_todo_get_todo($id);
-    if ($todo && local_todo_can_manage_todo($id)) {
+    $todo = todo_manager::get_todo($id);
+    if ($todo && todo_manager::can_manage_todo($id)) {
         $editing = true;
     } else {
         $todo = null;
@@ -50,14 +52,14 @@ if ($mform->is_cancelled()) {
 } else if ($data = $mform->get_data()) {
     if (!empty($data->id)) {
         // update existing todo
-        if (local_todo_update_todo($data->id, $data)) {
+        if (todo_manager::update_todo($data->id, $data)) {
             redirect(new moodle_url('/local/todo/index.php'), get_string('todoupdated', 'local_todo'));
         } else {
             echo $OUTPUT->notification('Failed to update todo', 'error');
         }
     } else {
         // create new todo
-        $newid = local_todo_create_todo($data);
+        $newid = todo_manager::create_todo($data);
         if ($newid) {
             redirect(new moodle_url('/local/todo/index.php'), get_string('todoadded', 'local_todo'));
         } else {
@@ -66,8 +68,7 @@ if ($mform->is_cancelled()) {
     }
 }
 
-// get user's todos
-$todos = local_todo_get_user_todos($USER->id);
+$todos = todo_manager::get_user_todos($USER->id);
 
 $renderer = $PAGE->get_renderer('local_todo');
 echo $renderer->render_todo_page($todos, $mform, $editing, $todo);
