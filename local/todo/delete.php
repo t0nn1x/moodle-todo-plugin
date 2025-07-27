@@ -11,6 +11,8 @@
 require_once(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/lib.php');
 
+use local_todo\todo_manager;
+
 $id = required_param('id', PARAM_INT);
 $confirm = optional_param('confirm', 0, PARAM_BOOL);
 
@@ -19,9 +21,8 @@ require_login();
 $context = context_user::instance($USER->id);
 require_capability('local/todo:delete', $context);
 
-// get permissions
-$todo = local_todo_get_todo($id);
-if (!$todo || !local_todo_can_manage_todo($id)) {
+$todo = todo_manager::get_todo($id);
+if (!$todo || !todo_manager::can_manage_todo($id)) {
     throw new moodle_exception('invalidtodo', 'local_todo');
 }
 
@@ -32,7 +33,7 @@ $PAGE->set_title(get_string('deletetodo', 'local_todo'));
 $PAGE->set_heading(get_string('deletetodo', 'local_todo'));
 
 if ($confirm && confirm_sesskey()) {
-    if (local_todo_delete_todo($id)) {
+    if (todo_manager::delete_todo($id)) {
         redirect(
             new moodle_url('/local/todo/index.php'),
             get_string('tododeleted', 'local_todo')

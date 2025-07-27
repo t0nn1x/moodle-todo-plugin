@@ -67,14 +67,7 @@ function local_todo_extend_navigation_user_profile(navigation_node $navigation, 
  * @return array Array of todo objects
 */
 function local_todo_get_user_todos($userid, $completedonly = false) {
-    global $DB;
-
-    $conditions = ['userid' => $userid];
-    if ($completedonly !== false) {
-        $conditions['completed'] = $completedonly ? 1 : 0;
-    }
-
-    return $DB->get_records('local_todo', $conditions, 'duedate ASC, timecreated DESC');
+    return \local_todo\todo_manager::get_user_todos($userid, $completedonly);
 }
 
 /**
@@ -84,8 +77,7 @@ function local_todo_get_user_todos($userid, $completedonly = false) {
  * @return stdClass|false Todo object or false if not found
 */
 function local_todo_get_todo($todoid) {
-    global $DB;
-    return $DB->get_record('local_todo', ['id' => $todoid]);
+    return \local_todo\todo_manager::get_todo($todoid);
 }
 
 /**
@@ -95,18 +87,7 @@ function local_todo_get_todo($todoid) {
  * @return int The ID of the new todo
 */
 function local_todo_create_todo($data) {
-    global $DB, $USER;
-
-    $todo = new stdClass();
-    $todo->userid = $USER->id;
-    $todo->name = $data->name;
-    $todo->description = $data->description ?? '';
-    $todo->duedate = $data->duedate ?? null;
-    $todo->completed = $data->completed ?? 0;
-    $todo->timecreated = time();
-    $todo->timemodified = time();
-
-    return $DB->insert_record('local_todo', $todo);
+    return \local_todo\todo_manager::create_todo($data);
 }
 
 /**
@@ -117,20 +98,7 @@ function local_todo_create_todo($data) {
  * @return bool True on success
 */
 function local_todo_update_todo($todoid, $data) {
-    global $DB;
-
-    $todo = local_todo_get_todo($todoid);
-    if (!$todo) {
-        return false;
-    }
-
-    $todo->name = $data->name;
-    $todo->description = $data->description ?? '';
-    $todo->duedate = $data->duedate ?? null;
-    $todo->completed = $data->completed ?? 0;
-    $todo->timemodified = time();
-
-    return $DB->update_record('local_todo', $todo);
+    return \local_todo\todo_manager::update_todo($todoid, $data);
 }
 
 /**
@@ -140,8 +108,7 @@ function local_todo_update_todo($todoid, $data) {
  * @return bool True on success
 */
 function local_todo_delete_todo($todoid) {
-    global $DB;
-    return $DB->delete_records('local_todo', ['id' => $todoid]);
+    return \local_todo\todo_manager::delete_todo($todoid);
 }
 
 /**
@@ -151,19 +118,6 @@ function local_todo_delete_todo($todoid) {
  * @param int $userid User ID (optional, defaults to current user)
  * @return bool True if user can manage the todo
 */
-function local_todo_can_manage_todo($todoid, $userid = null)
-{
-    global $USER, $DB;
-
-    if ($userid === null) {
-        $userid = $USER->id;
-    }
-
-    $todo = local_todo_get_todo($todoid);
-    if (!$todo) {
-        return false;
-    }
-
-    $usercontext = context_user::instance($userid);
-    return $todo->userid == $userid && has_capability('local/todo:manage', $usercontext);
+function local_todo_can_manage_todo($todoid, $userid = null) {
+    return \local_todo\todo_manager::can_manage_todo($todoid, $userid);
 }
